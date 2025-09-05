@@ -17,4 +17,5 @@ void *philosopher_routine(void *arg)
         ph_think(phil);
         i++;
     }
+    return (NULL);
 }
