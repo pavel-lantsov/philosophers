@@ -1,6 +1,6 @@
 #include "philosophers.h"
 
-static int	is_valid_number(char *str)
+static int is_valid_number(char *str)
 {
 	int i;
 
@@ -16,7 +16,7 @@ static int	is_valid_number(char *str)
 	return (1);
 }
 
-static int	parse_args(int argc, char *argv[], t_data *data)
+static int parse_args(int argc, char *argv[], t_data *data)
 {
 	int i;
 
@@ -42,19 +42,28 @@ static int	parse_args(int argc, char *argv[], t_data *data)
 
 int	main(int argc, char *argv[])
 {
-	t_data data;
-	t_phil *phils;
+	t_data	data;
+	t_phil	*phils;
+	int		i;
 
 	if (!parse_args(argc, argv, &data))
 	{
 		ft_log("Error: Invalid arguments");
 		return (1);
 	}
+	data.stop_flag = 0;
+	data.start_time = get_timestamp();
 	phils = init_philosophers(&data);
 	if (!start(phils, &data))
-    {
-        ft_log("Error: Failed to start\n");
-        return (1);
-    }
+	{
+		ft_log("Error: Failed to start\n");
+		return (1);
+	}
+	i = 0;
+	while (i < data.number_of_philosophers)
+	{
+		pthread_join(phils[i].thread, NULL);
+		i++;
+	}
 	return (0);
 }

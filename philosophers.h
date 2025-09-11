@@ -11,7 +11,9 @@ typedef struct s_data
     long time_to_die;
     long time_to_eat;
     long time_to_sleep;
+    long time_to_think;
     long start_time;
+    int stop_flag;
 } t_data;
 
 typedef struct s_phil
