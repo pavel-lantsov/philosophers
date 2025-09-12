@@ -14,6 +14,7 @@ typedef struct s_data
     long time_to_think;
     long start_time;
     int stop_flag;
+    pthread_mutex_t *forks;
 } t_data;
 
 typedef struct s_phil
@@ -22,6 +23,8 @@ typedef struct s_phil
     t_data *data;
     int id;
     long last_meal_time;
+    int left_fork;
+    int right_fork;
 } t_phil;
 
 void    ft_log(char *s);
