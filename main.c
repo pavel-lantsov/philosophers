@@ -52,7 +52,6 @@ int	main(int argc, char *argv[])
 		return (1);
 	}
 	data.stop_flag = 0;
-	data.start_time = get_timestamp();
 	phils = init_philosophers(&data);
 	if (!start(phils, &data))
 	{

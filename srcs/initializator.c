@@ -42,7 +42,7 @@ t_phil *init_philosophers(t_data *data)
 	{
 		philosophers[i].id = i + 1;
 		philosophers[i].data = data;
-		philosophers[i].last_meal_time = data->start_time;
+		philosophers[i].last_meal_time = 0;
 		philosophers[i].left_fork = i;
 		philosophers[i].right_fork = (i + 1) % data->number_of_philosophers;
 		i++;
