@@ -27,7 +27,7 @@ typedef struct s_phil
     int right_fork;
 } t_phil;
 
-void    ft_log(char *s);
+int    ft_log(char *s);
 void    ft_usleep(long ms);
 void    *philosopher_routine(void *arg);
 long    get_timestamp(void);

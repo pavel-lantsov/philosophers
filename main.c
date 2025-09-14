@@ -47,17 +47,13 @@ int	main(int argc, char *argv[])
 	int		i;
 
 	if (!parse_args(argc, argv, &data))
-	{
-		ft_log("Error: Invalid arguments");
-		return (1);
-	}
+		return (ft_log("Error: Invalid arguments"));
 	data.stop_flag = 0;
 	phils = init_philosophers(&data);
+	if (!phils)
+        return (ft_log("Error: Failed to initialize philosophers"));
 	if (!start(phils, &data))
-	{
-		ft_log("Error: Failed to start\n");
-		return (1);
-	}
+		return (ft_log("Error: Failed to start\n"));
 	i = 0;
 	while (i < data.number_of_philosophers)
 	{

@@ -1,6 +1,6 @@
 #include "philosophers.h"
 
-void	ft_log(char *s)
+int	ft_log(char *s)
 {
 	while (*s)
 	{
@@ -8,6 +8,7 @@ void	ft_log(char *s)
 		s++;
 	}
 	write(1, "\n", 1);
+	return (1);
 }
 long	ft_atol(const char *str)
 {
