@@ -33,6 +33,9 @@ static int parse_args(int argc, char *argv[], t_data *data)
 	data->time_to_die = ft_atol(argv[2]);
 	data->time_to_eat = ft_atol(argv[3]);
 	data->time_to_sleep = ft_atol(argv[4]);
+	data->must_eat_count = -1;
+	if (argc == 6)
+        data->must_eat_count = ft_atol(argv[5]);   
 	if (data->number_of_philosophers <= 0)
 		return (0);
 	if (data->time_to_die <= 0 || data->time_to_eat <= 0 || data->time_to_sleep <= 0)

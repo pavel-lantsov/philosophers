@@ -33,7 +33,8 @@ t_phil *init_philosophers(t_data *data)
 	int i;
 
 	data->forks = init_forks(data);
-  
+	if(!data->forks)
+		return (NULL);
 	philosophers = malloc(sizeof(t_phil) * data->number_of_philosophers);
 	if (!philosophers)
 		return (NULL);

@@ -14,6 +14,7 @@ typedef struct s_data
     long time_to_think;
     long start_time;
     int stop_flag;
+    long must_eat_count;
     pthread_mutex_t *forks;
 } t_data;
 
