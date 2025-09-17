@@ -1,9 +1,22 @@
 #include "philosophers.h"
 
-pthread_mutex_t *init_forks(t_data *data)
+static void free_forks(pthread_mutex_t *forks, int count)
 {
-	pthread_mutex_t	*forks;
-	int	i;
+	int i;
+
+	i = 0;
+	while (i < count)
+	{
+		pthread_mutex_destroy(&forks[i]);
+		i++;
+	}
+	free(forks);
+}
+
+static pthread_mutex_t *init_forks(t_data *data)
+{
+	pthread_mutex_t *forks;
+	int i;
 	int j;
 
 	forks = malloc(sizeof(pthread_mutex_t) * data->number_of_philosophers);
@@ -12,18 +25,12 @@ pthread_mutex_t *init_forks(t_data *data)
 	i = 0;
 	while (i < data->number_of_philosophers)
 	{
-		if(pthread_mutex_init(&forks[i], NULL) != 0)
+		if (pthread_mutex_init(&forks[i], NULL) != 0)
 		{
-		j = 0;
-            while (j < i)
-            {
-                pthread_mutex_destroy(&forks[j]);
-                j++;
-            }
-            free(forks);
-            return (NULL);
-        }
-        i++;
+			free_forks(forks, i);
+			return (NULL);
+		}
+		i++;
 	}
 	return (forks);
 }
@@ -33,11 +40,14 @@ t_phil *init_philosophers(t_data *data)
 	int i;
 
 	data->forks = init_forks(data);
-	if(!data->forks)
+	if (!data->forks)
 		return (NULL);
 	philosophers = malloc(sizeof(t_phil) * data->number_of_philosophers);
 	if (!philosophers)
+	{
+		free_forks(data->forks, data->number_of_philosophers);
 		return (NULL);
+	}
 	i = 0;
 	while (i < data->number_of_philosophers)
 	{
@@ -46,6 +56,7 @@ t_phil *init_philosophers(t_data *data)
 		philosophers[i].last_meal_time = 0;
 		philosophers[i].left_fork = i;
 		philosophers[i].right_fork = (i + 1) % data->number_of_philosophers;
+
 		i++;
 	}
 	return (philosophers);
