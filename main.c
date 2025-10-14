@@ -1,8 +1,8 @@
 #include "philosophers.h"
 
-static int is_valid_number(char *str)
+static int	is_valid_number(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!str || !str[0])
@@ -16,9 +16,9 @@ static int is_valid_number(char *str)
 	return (1);
 }
 
-static int parse_args(int argc, char *argv[], t_data *data)
+static int	parse_args(int argc, char *argv[], t_data *data)
 {
-	int i;
+	int	i;
 
 	if (argc < 5 || argc > 6)
 		return (0);
@@ -29,39 +29,65 @@ static int parse_args(int argc, char *argv[], t_data *data)
 			return (0);
 		i++;
 	}
-	data->number_of_philosophers = ft_atol(argv[1]);
+	data->num_of_phil = ft_atol(argv[1]);
 	data->time_to_die = ft_atol(argv[2]);
 	data->time_to_eat = ft_atol(argv[3]);
 	data->time_to_sleep = ft_atol(argv[4]);
 	data->must_eat_count = -1;
 	if (argc == 6)
-        data->must_eat_count = ft_atol(argv[5]);   
-	if (data->number_of_philosophers <= 0)
+        data->must_eat_count = ft_atol(argv[5]);
+	if (data->num_of_phil <= 0)
 		return (0);
 	if (data->time_to_die <= 0 || data->time_to_eat <= 0 || data->time_to_sleep <= 0)
 		return (0);
 	return (1);
 }
+static int	start(t_phil *phils, t_data *data)
+{
+	int	i;
 
+	i = 0;
+	data->start_time = get_timestamp();
+	while (i < data->num_of_phil)
+	{
+		phils[i].last_meal_time = data->start_time;
+		if (pthread_create(&phils[i].thread, NULL, phil_routine, &phils[i]) != 0)
+			ft_log("Error: Failed to create thread");
+		i++;
+	}
+	return (0);
+}
+
+static int checker(t_phil *phils, pthread_t *monitor, t_data *data)
+{
+	if (!phils)
+		return (ft_log("Error: Failed to initialize philosophers"));
+	if (start(phils, data))
+		return (ft_log("Error: Failed to start\n"));
+	if (pthread_create(monitor, NULL, death_monitor, phils) != 0)
+		ft_log("Error: Failed to create monitor thread");
+	return 0;
+}
 int	main(int argc, char *argv[])
 {
-	t_data	data;
-	t_phil	*phils;
+	pthread_t	monitor;
+	t_data		data;
+	t_phil		*phils;
+
 	int		i;
 
 	if (!parse_args(argc, argv, &data))
 		return (ft_log("Error: Invalid arguments"));
 	data.stop_flag = 0;
-	phils = init_philosophers(&data);
-	if (!phils)
-        return (ft_log("Error: Failed to initialize philosophers"));
-	if (!start(phils, &data))
-		return (ft_log("Error: Failed to start\n"));
+	phils = init_phils(&data);
+	if(checker(phils, &monitor, &data) != 0)
+		return (1);
 	i = 0;
-	while (i < data.number_of_philosophers)
+	while (i < data.num_of_phil || data.must_eat_count == 0)
 	{
-		pthread_join(phils[i].thread, NULL);
+		pthread_detach(phils[i].thread);
 		i++;
 	}
+	pthread_join(monitor, NULL);
 	return (0);
 }
