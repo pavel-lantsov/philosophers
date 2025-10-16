@@ -45,6 +45,7 @@ static void	init_phil_data(t_phil *phils, t_data *data)
 		phils[i].last_meal_time = 0;
 		phils[i].left_fork = i;
 		phils[i].right_fork = (i + 1) % data->num_of_phil;
+		phils[i].meals_eaten = 0;
 		i++;
 	}
 }

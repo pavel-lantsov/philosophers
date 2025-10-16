@@ -28,6 +28,7 @@ typedef struct s_phil
 	long last_meal_time;
 	int left_fork;
 	int right_fork;
+	int meals_eaten;
 } t_phil;
 
 int		ft_log(char *s);

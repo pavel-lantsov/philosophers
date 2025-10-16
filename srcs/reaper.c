@@ -21,15 +21,16 @@ void	*death_monitor(void *arg)
 	t_phil	*phils;
 	t_data	*data;
 	long	cur_time;
-	int	i;
+	int		i;
+	int 	full;
 
 	phils = (t_phil *)arg;
 	data = phils[0].data;
-
 	while (!is_dead(data))
 	{
 		i = 0;
 		cur_time = get_timestamp();
+		full = 0;
 		while (i < data->num_of_phil && !is_dead(data))
 		{
 			if (cur_time - phils[i].last_meal_time > data->time_to_die)
@@ -37,9 +38,16 @@ void	*death_monitor(void *arg)
 				safe_print(&phils[i], "died");
 				stop(data);
 				break ;
-			}
+			}		
+			if (data->must_eat_count != -1 && phils[i].meals_eaten >= data->must_eat_count)
+				full++;
 			i++;
 		}
+		if (data->must_eat_count > 0 && full == data->num_of_phil)
+			{
+				stop(data);
+				break ;
+			}
 		ft_usleep(1);
 	}
 	return(NULL);

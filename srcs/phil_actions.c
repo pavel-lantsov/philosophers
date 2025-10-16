@@ -22,9 +22,11 @@ static void	ph_eat(t_phil *phil)
 	safe_print(phil, "is eating");
 	phil->last_meal_time = get_timestamp();
 	ft_usleep(phil->data->time_to_eat);
+	phil->meals_eaten++;
 	pthread_mutex_unlock(&phil->data->forks[phil->right_fork]);
 	pthread_mutex_unlock(&phil->data->forks[phil->left_fork]);
 }
+
 static void	ph_sleep(t_phil *phil)
 {
 	safe_print(phil, "is sleeping");
