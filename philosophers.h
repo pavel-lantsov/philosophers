@@ -31,6 +31,8 @@ typedef struct s_phil
 	int			meals;
 }	t_phil;
 
+void	free_forks(pthread_mutex_t *forks, int count);
+void	destroy_mutex(t_data *data);
 int		ft_log(char *s);
 void	ft_usleep(long ms);
 void	*phil_routine(void *arg);
