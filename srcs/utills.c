@@ -10,6 +10,7 @@ int	ft_log(char *s)
 	write(1, "\n", 1);
 	return (1);
 }
+
 long	ft_atol(const char *str)
 {
 	long	result;
