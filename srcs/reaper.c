@@ -16,13 +16,14 @@ void	stop(t_data *data)
 	data->stop_flag = 1;
 	pthread_mutex_unlock(&data->death);
 }
+
 void	*death_monitor(void *arg)
 {
 	t_phil	*phils;
 	t_data	*data;
 	long	cur_time;
 	int		i;
-	int 	full;
+	int		full;
 
 	phils = (t_phil *)arg;
 	data = phils[0].data;
@@ -31,24 +32,24 @@ void	*death_monitor(void *arg)
 		i = 0;
 		cur_time = get_timestamp();
 		full = 0;
-		while (i < data->num_of_phil && !is_dead(data))
+		while (i < data->num_phil && !is_dead(data))
 		{
-			if (cur_time - phils[i].last_meal_time > data->time_to_die)
+			if (cur_time - phils[i].lst_meal_time > data->time_die)
 			{
 				safe_print(&phils[i], "died");
 				stop(data);
 				break ;
-			}		
-			if (data->must_eat_count != -1 && phils[i].meals_eaten >= data->must_eat_count)
+			}
+			if (data->must_eaten != -1 && phils[i].meals >= data->must_eaten)
 				full++;
 			i++;
 		}
-		if (data->must_eat_count > 0 && full == data->num_of_phil)
-			{
-				stop(data);
-				break ;
-			}
+		if (data->must_eaten > 0 && full == data->num_phil)
+		{
+			stop(data);
+			break ;
+		}
 		ft_usleep(1);
 	}
-	return(NULL);
+	return (NULL);
 }

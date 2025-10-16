@@ -2,7 +2,7 @@
 
 long	get_timestamp(void)
 {
-	struct timeval tv;
+	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
 	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
@@ -10,7 +10,7 @@ long	get_timestamp(void)
 
 void	ft_usleep(long ms)
 {
-	long start;
+	long	start;
 
 	start = get_timestamp();
 	while (get_timestamp() - start < ms)

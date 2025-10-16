@@ -29,36 +29,37 @@ static int	parse_args(int argc, char *argv[], t_data *data)
 			return (0);
 		i++;
 	}
-	data->num_of_phil = ft_atol(argv[1]);
-	data->time_to_die = ft_atol(argv[2]);
-	data->time_to_eat = ft_atol(argv[3]);
-	data->time_to_sleep = ft_atol(argv[4]);
-	data->must_eat_count = -1;
+	data->num_phil = ft_atol(argv[1]);
+	data->time_die = ft_atol(argv[2]);
+	data->time_eat = ft_atol(argv[3]);
+	data->time_slp = ft_atol(argv[4]);
+	data->must_eaten = -1;
 	if (argc == 6)
-        data->must_eat_count = ft_atol(argv[5]);
-	if (data->num_of_phil <= 0)
+		data->must_eaten = ft_atol(argv[5]);
+	if (data->num_phil <= 0)
 		return (0);
-	if (data->time_to_die <= 0 || data->time_to_eat <= 0 || data->time_to_sleep <= 0)
+	if (data->time_die <= 0 || data->time_eat <= 0 || data->time_slp <= 0)
 		return (0);
 	return (1);
 }
-static int	start(t_phil *phils, t_data *data)
+
+static int	start(t_phil *phil, t_data *data)
 {
 	int	i;
 
 	i = 0;
 	data->start_time = get_timestamp();
-	while (i < data->num_of_phil)
+	while (i < data->num_phil)
 	{
-		phils[i].last_meal_time = data->start_time;
-		if (pthread_create(&phils[i].thread, NULL, phil_routine, &phils[i]) != 0)
+		phil[i].lst_meal_time = data->start_time;
+		if (pthread_create(&phil[i].thread, NULL, phil_routine, &phil[i]) != 0)
 			ft_log("Error: Failed to create thread");
 		i++;
 	}
 	return (0);
 }
 
-static int checker(t_phil *phils, pthread_t *monitor, t_data *data)
+static int	checker(t_phil *phils, pthread_t *monitor, t_data *data)
 {
 	if (!phils)
 		return (ft_log("Error: Failed to initialize philosophers"));
@@ -66,24 +67,24 @@ static int checker(t_phil *phils, pthread_t *monitor, t_data *data)
 		return (ft_log("Error: Failed to start\n"));
 	if (pthread_create(monitor, NULL, death_monitor, phils) != 0)
 		ft_log("Error: Failed to create monitor thread");
-	return 0;
+	return (0);
 }
+
 int	main(int argc, char *argv[])
 {
 	pthread_t	monitor;
 	t_data		data;
 	t_phil		*phils;
-
-	int		i;
+	int			i;
 
 	if (!parse_args(argc, argv, &data))
 		return (ft_log("Error: Invalid arguments"));
 	data.stop_flag = 0;
 	phils = init_phils(&data);
-	if(checker(phils, &monitor, &data) != 0)
+	if (checker(phils, &monitor, &data) != 0)
 		return (1);
 	i = 0;
-	while (i < data.num_of_phil || data.must_eat_count == 0)
+	while (i < data.num_phil || data.must_eaten == 0)
 	{
 		pthread_detach(phils[i].thread);
 		i++;
