@@ -1,13 +1,21 @@
 #include "philosophers.h"
 
-void	safe_print(t_phil *phil, char *action)
+void	ph_take_fork(t_phil *phil)
 {
-	long	time;
-
-	time = get_timestamp() - phil->data->start_time;
-	pthread_mutex_lock(&phil->data->print);
-	printf("%ld %d %s\n", time, phil->id, action);
-	pthread_mutex_unlock(&phil->data->print);
+	if(phil->id %2 == 0)
+	{
+	pthread_mutex_lock(&phil->data->forks[phil->left_fork]);
+	safe_print(phil, "has taken a fork");
+	pthread_mutex_lock(&phil->data->forks[phil->right_fork]);
+	safe_print(phil, "has taken a fork");
+	}
+	else
+	{
+	pthread_mutex_lock(&phil->data->forks[phil->right_fork]);
+	safe_print(phil, "has taken a fork");
+	pthread_mutex_lock(&phil->data->forks[phil->left_fork]);
+	safe_print(phil, "has taken a fork");
+	}
 }
 
 static void	ph_think(t_phil *phil)
@@ -17,11 +25,7 @@ static void	ph_think(t_phil *phil)
 
 static void	ph_eat(t_phil *phil)
 {
-	pthread_mutex_lock(&phil->data->forks[phil->left_fork]);
-	safe_print(phil, "has taken a fork");
-	pthread_mutex_lock(&phil->data->forks[phil->right_fork]);
-	safe_print(phil, "has taken a fork");
-	safe_print(phil, "is eating");
+	ph_take_fork(phil);
 	phil->lst_meal_time = get_timestamp();
 	ft_usleep(phil->data->time_eat);
 	phil->meals++;
