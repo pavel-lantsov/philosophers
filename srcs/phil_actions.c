@@ -26,6 +26,7 @@ static void	ph_think(t_phil *phil)
 static void	ph_eat(t_phil *phil)
 {
 	ph_take_fork(phil);
+	safe_print(phil, "is eating");
 	phil->lst_meal_time = get_timestamp();
 	ft_usleep(phil->data->time_eat);
 	phil->meals++;
