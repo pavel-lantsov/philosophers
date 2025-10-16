@@ -70,6 +70,13 @@ static int	checker(t_phil *phils, pthread_t *monitor, t_data *data)
 	return (0);
 }
 
+static void free_all(t_phil *phils, t_data *data)
+{
+	free(phils);
+	free_forks(data->forks, data->num_phil);
+	destroy_mutex(data);
+}
+
 int	main(int argc, char *argv[])
 {
 	pthread_t	monitor;
@@ -86,9 +93,10 @@ int	main(int argc, char *argv[])
 	i = 0;
 	while (i < data.num_phil || data.must_eaten == 0)
 	{
-		pthread_detach(phils[i].thread);
+		pthread_join(phils[i].thread, NULL);
 		i++;
 	}
 	pthread_join(monitor, NULL);
+	free_all(phils, &data);
 	return (0);
 }

@@ -1,6 +1,6 @@
 #include "philosophers.h"
 
-static void	free_forks(pthread_mutex_t *forks, int count)
+void	free_forks(pthread_mutex_t *forks, int count)
 {
 	int	i;
 
@@ -51,7 +51,7 @@ static void	init_phil_data(t_phil *phils, t_data *data)
 	}
 }
 
-static void	destroy_mutex(t_data *data)
+void	destroy_mutex(t_data *data)
 {
 	pthread_mutex_destroy(&data->print);
 	pthread_mutex_destroy(&data->death);
