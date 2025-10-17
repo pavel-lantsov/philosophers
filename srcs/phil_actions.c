@@ -47,8 +47,14 @@ void	*phil_routine(void *arg)
 	phil = (t_phil *)arg;
 	while (!is_dead(phil->data))
 	{
+		if (is_dead(phil->data))
+            break;
 		ph_think(phil);
+		if (is_dead(phil->data))
+            break;
 		ph_eat(phil);
+		if (is_dead(phil->data))
+            break;
 		ph_sleep(phil);
 	}
 	return (NULL);
