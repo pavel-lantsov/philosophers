@@ -31,6 +31,7 @@ typedef struct s_phil
 	int			meals;
 }	t_phil;
 
+int		parse_args(int argc, char **argv, t_data *data);
 void	free_forks(pthread_mutex_t *forks, int count);
 void	destroy_mutex(t_data *data);
 int		ft_log(char *s);
