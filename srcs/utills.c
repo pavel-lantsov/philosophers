@@ -1,10 +1,11 @@
 #include "philosophers.h"
+
 void	safe_print(t_phil *phil, char *action)
 {
 	long	time;
 
 	if (is_dead(phil->data))
-            return ;
+		return ;
 	time = get_timestamp() - phil->data->start_time;
 	pthread_mutex_lock(&phil->data->print);
 	printf("%ld %d %s\n", time, phil->id, action);
