@@ -16,9 +16,10 @@ void	stop(t_data *data)
 	data->stop_flag = 1;
 	pthread_mutex_unlock(&data->death);
 }
-void die(t_phil *phils, t_data *data)
+
+void	die(t_phil *phils, t_data *data)
 {
-	long  time;
+	long	time;
 
 	pthread_mutex_lock(&phils->data->print);
 	stop(data);
@@ -43,9 +44,9 @@ static int	check_phills(t_phil *phils, t_data *data)
 		if (cur_time - phils[i].lst_meal_time > data->time_die)
 		{
 			die(phils, data);
-			return(1);
+			return (1);
 		}
-			if (data->must_eaten != -1 && phils[i].meals >= data->must_eaten)
+		if (data->must_eaten != -1 && phils[i].meals >= data->must_eaten)
 			full++;
 		i++;
 	}

@@ -6,10 +6,10 @@ void	safe_print(t_phil *phil, char *action)
 
 	pthread_mutex_lock(&phil->data->print);
 	if (is_dead(phil->data))
-    {
-        pthread_mutex_unlock(&phil->data->print);
-        return ;
-    }
+	{
+		pthread_mutex_unlock(&phil->data->print);
+		return ;
+	}
 	time = get_timestamp() - phil->data->start_time;
 	printf("%ld %d %s\n", time, phil->id, action);
 	pthread_mutex_unlock(&phil->data->print);

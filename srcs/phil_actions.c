@@ -3,12 +3,12 @@
 static void	ph_take_fork(t_phil *phil, int fork)
 {
 	if (is_dead(phil->data))
-			return ;
+		return ;
 	pthread_mutex_lock(&phil->data->forks[fork]);
 	safe_print(phil, "has taken a fork");
 }
 
-static void eat_alone(t_phil *phil)
+static void	eat_alone(t_phil *phil)
 {
 	ph_take_fork(phil, phil->left_fork);
 	ft_usleep(phil->data->time_die + 10);
@@ -16,10 +16,10 @@ static void eat_alone(t_phil *phil)
 }
 
 static void	ph_eat(t_phil *phil)
-{	
+{
 	if (is_dead(phil->data))
-			return ;
-	if(phil->data->num_phil == 1)
+		return ;
+	if (phil->data->num_phil == 1)
 		eat_alone(phil);
 	else
 	{
@@ -30,7 +30,7 @@ static void	ph_eat(t_phil *phil)
 		}
 		else
 		{
-			ph_take_fork(phil, phil->right_fork);	
+			ph_take_fork(phil, phil->right_fork);
 			ph_take_fork(phil, phil->left_fork);
 		}
 		safe_print(phil, "is eating");
