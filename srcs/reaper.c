@@ -16,6 +16,18 @@ void	stop(t_data *data)
 	data->stop_flag = 1;
 	pthread_mutex_unlock(&data->death);
 }
+void die(t_phil *phils, t_data *data)
+{
+	long  time;
+
+	pthread_mutex_lock(&phils->data->print);
+	stop(data);
+	if (is_dead(phils->data))
+	{
+		time = get_timestamp() - phils->data->start_time;
+		printf("%ld %d %s\n", time, phils->id, "died");
+	}
+}
 
 static int	check_phills(t_phil *phils, t_data *data)
 {
@@ -30,16 +42,16 @@ static int	check_phills(t_phil *phils, t_data *data)
 	{
 		if (cur_time - phils[i].lst_meal_time > data->time_die)
 		{
-			safe_print(&phils[i], "died");
-			stop(data);
-			return (1);
+			die(phils, data);
+			return(1);
 		}
-		if (data->must_eaten != -1 && phils[i].meals >= data->must_eaten)
+			if (data->must_eaten != -1 && phils[i].meals >= data->must_eaten)
 			full++;
 		i++;
 	}
 	if (data->must_eaten > 0 && full == data->num_phil)
 	{
+		pthread_mutex_lock(&phils->data->print);
 		stop(data);
 		return (1);
 	}
@@ -55,9 +67,9 @@ void	*death_monitor(void *arg)
 	data = phils[0].data;
 	while (!is_dead(data))
 	{
-		if (check_phills(phils, data))
-			break ;
+		check_phills(phils, data);
 		ft_usleep(1);
 	}
+	pthread_mutex_unlock(&phils->data->print);
 	return (NULL);
 }

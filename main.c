@@ -48,7 +48,7 @@ int	main(int argc, char *argv[])
 	if (checker(phils, &monitor, &data) != 0)
 		return (1);
 	i = 0;
-	while (i < data.num_phil || data.must_eaten == 0)
+	while (i < data.num_phil)
 	{
 		pthread_join(phils[i].thread, NULL);
 		i++;
