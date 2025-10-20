@@ -11,7 +11,6 @@ typedef struct s_data
 	long				time_die;
 	long				time_eat;
 	long				time_slp;
-	long				time_thk;
 	long				start_time;
 	int					stop_flag;
 	long				must_eaten;

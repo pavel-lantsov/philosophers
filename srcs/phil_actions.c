@@ -58,8 +58,7 @@ void	*phil_routine(void *arg)
 		}
 		if (!is_dead(phil->data))
 		{
-			safe_print(phil, "is sleeping");
-			ft_usleep(phil->data->time_slp);
+			safe_print(phil, "is thinking");
 		}
 	}
 	return (NULL);
